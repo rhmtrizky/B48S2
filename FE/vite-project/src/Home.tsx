@@ -30,7 +30,7 @@ function Home() {
         </form>
         {threads?.map((item, index) => {
           return (
-            <ThreadCard key={index} content={item.content} image={item.image} id={item.id} user={item.user}/>
+            <ThreadCard key={index} content={item.content} image={item.image} id={item.id} likes_count={item.likes_count} user={item.user} posted_at={item.posted_at}/>
           )
         })}
       </Box>

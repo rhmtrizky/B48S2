@@ -8,27 +8,39 @@ export function useHooks() {
 
         const fetchData = async () => {
             try {
-                const response = await API.get("/thread")
+                const response = await API.get("/threads", { 
+                    headers: {
+                        Authorization: `Bearer ${localStorage.token}`
+                    }
+                })
+                
                 setThreads(response.data)
                 console.log(response.data)
             } catch(error) {
-                console.error("data ga dapet")
+                console.error("data ga dapet", error)
             }
         }
 
         useEffect(() => {
-                fetchData()
-            }, [])
+            fetchData()
+        }, [])
 
     const [formData, setFormData] = useState({
         content: '',
         image: ''
     })
 
-    const createFetchData = async (event: React.FormEvent) => {
+    const createFetchData = async (event: React.FormEvent, identifier: string) => {
         event.preventDefault()
+        const loginSession = localStorage.getItem('loginSession');
         try {
-            const response = await API.post("/thread", formData)
+            const response = await API.post("/threads", {
+                where: {
+                    [identifier]: loginSession
+                },
+                content: formData.content,
+                image: formData.image
+            });
             fetchData()
             console.log(response.data)
         } catch (error) {

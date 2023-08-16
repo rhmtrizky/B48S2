@@ -8,7 +8,7 @@ export default function FollowButtonWithShadow() {
       <Button
         pos="fixed"
         ml="25px"
-        mt="60px"
+        mt="100px"
         px={9}
         fontSize={'sm'}
         rounded={'full'}

@@ -5,3 +5,15 @@ export interface IUser {
     password: string,
     picture: string,
 }
+
+export interface IUserRegister {
+    username: string,
+    full_name: string,
+    email: string,
+    password: string,
+}
+
+export interface IUserLogin {
+    email: string,
+    password: string,
+}
