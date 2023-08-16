@@ -9,6 +9,9 @@ class AuthController {
     login(req: Request, res: Response) {
         AuthorService.login(req, res)
     }
+    check(req: Request, res: Response) {
+        AuthorService.check(req, res)
+    }
 }
 
 export default new AuthController()

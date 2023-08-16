@@ -17,7 +17,7 @@ class AuthorService {
         if (error) {
             return res.status(400).json({ error: error})
         }
-        const password = bcrypt.hash(data.password, 10)
+        const password = await bcrypt.hash(value.password, 10)
 
         const checkEmail = await this.authRepository.count (
             {
@@ -28,13 +28,13 @@ class AuthorService {
             }
         )
         if (checkEmail > 0)  {
-            return res.status(400).json("Email/password salah!")
+            return res.status(400).json("Email already exist")
         }
         const user = this.authRepository.create({
             full_name: data.full_name,
             username: data.username,
             email: data.email,
-            password: data.password,
+            password: password,
         })
         const createdUser = this.authRepository.save(user)
         return res.status(200).json(createdUser)

@@ -1,14 +1,16 @@
 import { NextFunction, Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
 
-const authenticate = (
+const Authenticate = (
     req: Request,
     res: Response,
     next: NextFunction
 ): Response => {
     const authorizationHeader = req.headers.authorization
 
-    if (!authorizationHeader || authorizationHeader.startsWith("Bearer")) {
+    console.log(authorizationHeader.startsWith("Bearer"))
+
+    if (!authorizationHeader || !authorizationHeader.startsWith("Bearer")) {
         return res.status(400).json ({
             error: "Unauthorized"
         })
@@ -22,8 +24,8 @@ const authenticate = (
         res.locals.loginSession = loginSession
         next()
     } catch (error) {
-        return res.status(400).json({error: "Unauthorized"})
+        return res.status(400).json({error: "wrong token"})
     }
 }
 
-export default authenticate
+export default Authenticate
