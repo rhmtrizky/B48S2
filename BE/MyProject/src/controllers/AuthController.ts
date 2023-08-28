@@ -1,16 +1,19 @@
 import * as express from "express"
 import { Request, Response } from "express"
-import AuthorService from "../services/AuthorService"
+import AuthService from "../services/AuthService"
 
 class AuthController {
     register(req: Request, res: Response) {
-        AuthorService.register(req, res)
+        AuthService.register(req, res)
     }
     login(req: Request, res: Response) {
-        AuthorService.login(req, res)
+        AuthService.login(req, res)
+    }
+    logout(req: Request, res: Response) {
+        AuthService.logout(req, res)
     }
     check(req: Request, res: Response) {
-        AuthorService.check(req, res)
+        AuthService.check(req, res)
     }
 }
 

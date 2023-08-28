@@ -8,10 +8,16 @@ export class Follow {
     @PrimaryGeneratedColumn()
     id: number
 
-    @ManyToOne(() => User, (user) => user.follow)
-    follower: number
+    @ManyToOne(() => User, (user) => user.followers, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
+    })
+    follower: User
 
-    @ManyToOne(() => User, (user) => user.follow)
-    followed: number
+    @ManyToOne(() => User, (user) => user.followings, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
+    })
+    followed: User
 
 }

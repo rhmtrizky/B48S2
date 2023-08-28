@@ -1,8 +1,14 @@
 import * as express from "express"
 import { Request, Response } from "express"
-import ThreadsController from "../controllers/ThreadsController"
+import ThreadsController  from "../controllers/ThreadsController"
 import Authenticate from "../middlerwares/AuthMiddleware"
 import AuthController from "../controllers/AuthController"
+import { Upload } from "../middlerwares/Upload"
+import ThreadsQueue from "../queues/TheadsQueue"
+import RepliesController from "../controllers/RepliesController"
+import LikesController from "../controllers/LikeController"
+import ProfileByIdController from "../controllers/ProfileByIdController"
+
 
 const router = express.Router()
 
@@ -12,16 +18,26 @@ router.get("/", (req: Request, res: Response) => {
 
 // router.get("/threads", ThreadsController.find)
 router.get("/threads", Authenticate, ThreadsController.find)
-router.post("/threads", Authenticate,ThreadsController.create)
+router.get("/threads/profile", Authenticate, ThreadsController.findThreadById)
+router.post("/threads", Authenticate, Upload("image"), ThreadsQueue.create)
 router.get("/thread/:id", ThreadsController.findOne)
-router.get("/thread/delete/:id", ThreadsController.delete)
-router.patch("/thread/update/:id", ThreadsController.update)
+router.patch("/editProfile/:id", ThreadsController.update)
+router.get("/profile/:id", ProfileByIdController.findOne)
+// router.get("/thread/delete/:id", ThreadsController.delete)
+// router.patch("/thread/update", ThreadsController.update)
 
 
 
 router.post("/register", AuthController.register)
 router.post("/login", AuthController.login)
+router.get("/logout", AuthController.logout)
 router.get("/check", Authenticate, AuthController.check)
+
+router.get("/replies", Authenticate, RepliesController.find)
+router.post("/reply", Authenticate, RepliesController.create)
+
+router.post("/like", Authenticate, LikesController.create)
+router.delete("/like/:thread_id", Authenticate, LikesController.delete)
 
 
 

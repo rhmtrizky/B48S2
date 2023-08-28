@@ -13,18 +13,27 @@ export class Thread {
     @Column()
     content: string
 
-    @Column()
+    @Column({nullable: true})
     image: string
 
     @Column({type: "timestamp" , default: () => "CURRENT_TIMESTAMP"})
     posted_at: Date
 
-    @ManyToOne(() => User, (user) => user.threads)
+    @ManyToOne(() => User, (user) => user.threads, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+    })
     user: User
 
-    @OneToMany(() => Like, (like) => like.thread)
-    like: Like[]
+    @OneToMany(() => Like, (like) => like.thread, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+    })
+    likes: Like[]
 
-    @OneToMany(() => Reply, (reply) => reply.thread)
-    reply: Reply[]
+    @OneToMany(() => Reply, (like) => like.thread, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
+    })
+    replies: Reply[]
 }

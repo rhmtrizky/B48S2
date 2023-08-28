@@ -30,10 +30,34 @@ export class User {
     description: string
 
     @OneToMany(() => Thread, (thread) => thread.user, {
-        onDelete: "CASCADE"
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE"
     })
+
     threads: Thread[]
-    like: Like[]
-    reply: Reply[]
-    follow: Follow[]
+    @OneToMany(() => Thread, (thread) => thread.user, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE"
+    })
+    likes: Like[]
+
+    @OneToMany(() => Follow, (follow) => follow.follower, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE"
+    })
+    followers: Follow[]
+
+    @OneToMany(() => Follow, (follow) => follow.followed, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE"
+    })
+    followings: Follow[]
+
+    @OneToMany(() => Reply, (reply) => reply.user, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE"
+    })
+    replies: Reply[]
+
+    
 }

@@ -13,11 +13,12 @@ AppDataSource.initialize()
     app.use(express.json());
     app.use(cors())
 
+    app.use("/api/v1", router); 
 
-    app.use("/api/v1", router); // Add a leading slash before "api/v1"
-
+    
     app.listen(port, () => {
       console.log(`server running on http://localhost:${port}`);
     });
+    
   })
   .catch(error => console.log(error));

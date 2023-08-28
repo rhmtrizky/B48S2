@@ -8,7 +8,7 @@ const Authenticate = (
 ): Response => {
     const authorizationHeader = req.headers.authorization
 
-    console.log(authorizationHeader.startsWith("Bearer"))
+    // console.log(authorizationHeader.startsWith("Bearer"))
 
     if (!authorizationHeader || !authorizationHeader.startsWith("Bearer")) {
         return res.status(400).json ({
@@ -19,8 +19,8 @@ const Authenticate = (
     const token = authorizationHeader.split(" ")[1]
 
     try {
-        const loginSession = jwt.verify(token, "bagianSecret")
-        console.log("ini bagian login session", loginSession)
+        const loginSession = jwt.verify(token, "rhmtrizky123")
+        // console.log("ini bagian login session", loginSession)
         res.locals.loginSession = loginSession
         next()
     } catch (error) {
