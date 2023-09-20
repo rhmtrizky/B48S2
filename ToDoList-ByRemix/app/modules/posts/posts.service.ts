@@ -10,31 +10,39 @@ export async  function getPosts(title: string) {
     return await prisma.post.findMany({
         where: {
             title: {
-                contains: title
-            }
+                contains: title,
+            },
         },
         orderBy: {
-            id: 'desc'
+            id: "desc",
         }
     })
 }
 
-export async function createPost(data: any) {
-    const dataPost = await prisma.post.create({
-        data : data,
-    })
-    return dataPost
+export async function createPost(data: any, userId: string) {
+    const dataPost = await prisma.post.create({ 
+        data: {
+            title: data.title,
+            isDone: data.isDone,
+            jokester: {
+                connect: { id: userId }, // Connect the post to the specified user
+            },
+        },
+    });
+
+    return dataPost;
 }
 
-export async function deletePost(Id: any) {
+
+export async function deletePost(Id: string) {
     return prisma.post.delete({
         where: {
-            id: parseInt(Id)
+            id: Id
         }
     })
 }
 
-export async function updatePost(postId: number, updatedTitle: string) {
+export async function updatePost(postId: string, updatedTitle: string) {
     const updatedPost = await prisma.post.update({
         where: {
             id: postId

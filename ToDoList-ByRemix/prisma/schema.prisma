@@ -10,12 +10,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+model User {
+  id           String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  username     String   @unique
+  hashedPassword String
+  post         Post[]
+
+@@map("users")  
+}
+
 model Post {
-  id        Int     @id @default(autoincrement())
+  id        String     @id @default(uuid())
+  jokesterId String
+  jokester   User     @relation(fields: [jokesterId], references: [id], onDelete: Cascade)
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
   title     String  @db.VarChar(255)
-   isDone Boolean @db.Boolean
+  isDone Boolean @db.Boolean
 
-@@map("post")
+@@map("posts")
 }
