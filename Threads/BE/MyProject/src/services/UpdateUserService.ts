@@ -1,43 +1,47 @@
-import { Repository } from "typeorm";
-import { User } from "../entities/User";
-import { AppDataSource } from "../data-source";
-import { Request, Response } from "express";
+import { Repository } from 'typeorm';
+import { User } from '../entities/User';
+import { AppDataSource } from '../data-source';
+import { Request, Response } from 'express';
+import { updateUserSchema } from '../utils/threads';
+import * as amqp from 'amqplib';
+import sendMessageToQueue from '../libs/Rabbitmq';
+import { v2 as cloudinary } from 'cloudinary';
+import 'dotenv/config';
 
 class UpdateUserService {
-    private readonly userRepository: Repository<User> = AppDataSource.getRepository(User);
+  private readonly userRepository: Repository<User> = AppDataSource.getRepository(User);
 
-    async update(req: Request, res: Response): Promise<Response> { 
-        const id = parseInt(req.params.id) 
-        const { username, full_name, description } = req.body 
+  async update(req: Request, res: Response): Promise<Response> {
+    const id = parseInt(req.params.id);
+    const { username, full_name, description } = req.body;
+    const filename = res.locals.filename;
 
-        console.log(req.body);
-         
-        try { 
-            const userData = await this.userRepository.findOne( 
-                { 
-                    where: { 
-                        id: id  
-                    }, 
-                    // relations: ['thread', 'like', 'replies', 'follow'] 
-                } 
-            ); 
-            
-            userData.username = username 
-            userData.full_name = full_name
-            userData.description = description 
-            // userData.picture = picture 
-            
-            const NewUserData = await this.userRepository.save(userData) 
-            console.log("ini userdata", NewUserData);
+    try {
+      const userData = await this.userRepository.findOne({
+        where: {
+          id: id,
+        },
+      });
 
-            return res.status(200).json( 
-                NewUserData 
-            ) 
-        } catch (error) { 
-            return res.status(500).json({ error: "Error mas bro" }) 
- 
-        } 
+      cloudinary.config({
+        cloud_name: process.env.cloud_name,
+        api_key: process.env.api_key,
+        api_secret: process.env.api_secret,
+      });
+
+      const cloudinaryResponse = await cloudinary.uploader.upload('./uploads/' + filename);
+
+      userData.username = username;
+      userData.full_name = full_name;
+      userData.picture = cloudinaryResponse.url;
+      userData.description = description;
+
+      const updatedUserData = await this.userRepository.save(userData);
+      return res.status(200).json(`Data successfully updated: ${JSON.stringify(updatedUserData)}`);
+    } catch (error) {
+      return res.status(500).json(error);
     }
+  }
 }
 
 export default new UpdateUserService();
