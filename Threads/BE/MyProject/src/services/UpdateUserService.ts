@@ -13,7 +13,7 @@ class UpdateUserService {
 
   async update(req: Request, res: Response): Promise<Response> {
     const id = parseInt(req.params.id);
-    const { username, full_name, description } = req.body;
+    const { username, full_name, description, picture } = req.body;
     const filename = res.locals.filename;
 
     try {
@@ -29,12 +29,36 @@ class UpdateUserService {
         api_secret: process.env.api_secret,
       });
 
-      const cloudinaryResponse = await cloudinary.uploader.upload('./uploads/' + filename);
+      let updatedPictureURL = userData.picture;
+      if (filename) {
+        const cloudinaryResponse = await cloudinary.uploader.upload('./uploads/' + filename);
+        updatedPictureURL = cloudinaryResponse.url;
+      } else {
+        userData.picture = userData.picture;
+      }
+      // userData.username = username;
+      // userData.full_name = full_name;
+      // userData.picture = cloudinaryResponse.url;
+      // userData.description = description;
 
-      userData.username = username;
-      userData.full_name = full_name;
-      userData.picture = cloudinaryResponse.url;
-      userData.description = description;
+      if (username !== null && username !== '') {
+        userData.username = username;
+      } else {
+        userData.username = userData.username;
+      }
+      if (full_name !== null && full_name !== '') {
+        userData.full_name = full_name;
+      } else {
+        userData.full_name = userData.full_name;
+      }
+
+      if (description !== null && description !== '') {
+        userData.description = description;
+      } else {
+        userData.description = userData.description;
+      }
+
+      userData.picture = updatedPictureURL;
 
       const updatedUserData = await this.userRepository.save(userData);
       return res.status(200).json(`Data successfully updated: ${JSON.stringify(updatedUserData)}`);
