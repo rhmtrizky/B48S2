@@ -1,6 +1,6 @@
 'use client';
 // import FollowButtonWithShadown from "./FollowButtonWithShadown"
-import { IconButton, Box, CloseButton, Flex, Icon, useColorModeValue, Text, Drawer, DrawerContent, useDisclosure, BoxProps, FlexProps } from '@chakra-ui/react';
+import { IconButton, Box, CloseButton, Flex, Icon, useColorModeValue, Text, Drawer, DrawerContent, useDisclosure, BoxProps, FlexProps, Button } from '@chakra-ui/react';
 import { FiHome, FiSearch, FiMenu } from 'react-icons/fi';
 import { RiUserFollowLine } from 'react-icons/ri';
 import { CgProfile } from 'react-icons/cg';
@@ -11,21 +11,19 @@ import ButtonLogout from './ButtonLogout';
 interface LinkItemProps {
   name: string;
   icon: IconType;
+  href: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome },
-  { name: 'Search', icon: FiSearch },
-  { name: 'Follows', icon: RiUserFollowLine },
-  { name: 'Profile', icon: CgProfile },
+  { name: 'Home', icon: FiHome, href: '/' },
+  { name: 'Search', icon: FiSearch, href: '/search' },
+  { name: 'Follows', icon: RiUserFollowLine, href: '/follows' },
+  { name: 'Profile', icon: CgProfile, href: '/DetailProfile' },
 ];
 
 export default function SimpleSidebar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box
-      minH="100vh"
-      bg={useColorModeValue('#F0F5F9', 'gray.900')}
-    >
+    <Box bg={useColorModeValue('#F0F5F9', 'gray.900')}>
       <SidebarContent
         onClose={() => onClose}
         display={{ base: 'none', md: 'block' }}
@@ -42,7 +40,7 @@ export default function SimpleSidebar() {
           <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
-      <ButtonLogout />
+      {/* <ButtonLogout /> */}
       {/* mobilenav */}
       <MobileNav
         display={{ base: 'flex', md: 'none' }}
@@ -65,7 +63,7 @@ interface SidebarProps extends BoxProps {
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Box
-      bg={useColorModeValue('#dfe9f0', '#dfe9f0')}
+      bg={{ base: 'white', md: 'white', lg: '#dfe9f0' }}
       w={'25%'}
       pos="fixed"
       h="full"
@@ -74,8 +72,9 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       <Flex
         h="20"
         alignItems="center"
-        mx="8"
+        mx="4"
         justifyContent="space-between"
+        pl={'7'}
       >
         <Text
           color="#1E2022"
@@ -99,12 +98,16 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       </Flex>
       {LinkItems.map((link) => (
         <NavItem
-          key={link.name}
+          key={link.href}
           icon={link.icon}
+          href={link.href}
         >
           {link.name}
         </NavItem>
       ))}
+      <Button mt={'-30px'}>
+        <ButtonLogout />
+      </Button>
     </Box>
   );
 };
@@ -112,40 +115,46 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 interface NavItemProps extends FlexProps {
   icon: IconType;
   children: ReactText;
+  href: string;
 }
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, href, ...rest }: NavItemProps) => {
   return (
     <Box
       as="a"
-      href="/"
       style={{ textDecoration: 'none' }}
       _focus={{ boxShadow: 'none' }}
     >
-      <Flex
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        cursor="pointer"
-        _hover={{
-          bg: '#C9D6DF',
-          color: '#1E2022',
-        }}
-        {...rest}
+      <a
+        href={href}
+        style={{ textDecoration: 'none' }}
       >
-        {icon && (
-          <Icon
-            mr="4"
-            fontSize="16"
-            _groupHover={{
-              color: '#1E2022',
-            }}
-            as={icon}
-          />
-        )}
-        {children}
-      </Flex>
+        <Flex
+          align="center"
+          p="4"
+          pl={10}
+          mx="4"
+          borderRadius="lg"
+          role="group"
+          cursor="pointer"
+          _hover={{
+            bg: '#C9D6DF',
+            color: '#1E2022',
+          }}
+          {...rest}
+        >
+          {icon && (
+            <Icon
+              mr="4"
+              fontSize="16"
+              _groupHover={{
+                color: '#1E2022',
+              }}
+              as={icon}
+            />
+          )}
+          {children}
+        </Flex>
+      </a>
     </Box>
   );
 };
@@ -158,6 +167,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     <Flex
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 24 }}
+      mb={'-50px'}
       height="20"
       alignItems="center"
       bg={useColorModeValue('white', 'gray.900')}
@@ -179,7 +189,21 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         fontFamily="monospace"
         fontWeight="bold"
       >
-        Logo
+        <Text
+          color="#1E2022"
+          fontSize="4xl"
+          fontWeight="bold"
+          display={'flex'}
+        >
+          cir{' '}
+          <Text
+            color="green"
+            fontSize="4xl"
+            fontWeight="bold"
+          >
+            cle.
+          </Text>
+        </Text>
       </Text>
     </Flex>
   );

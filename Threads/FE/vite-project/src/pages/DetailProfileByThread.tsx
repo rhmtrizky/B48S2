@@ -12,36 +12,22 @@ import {
   Button,
   // useColorModeValue,
   Grid,
-  Card,
-  CardHeader,
-  IconButton,
-  CardBody,
-  CardFooter,
+  SimpleGrid,
 } from '@chakra-ui/react';
 import SimpleSidebar from '../features/thread/components/SimpleSidebar';
 import { MdVerified } from 'react-icons/Md';
-// import { useSelector } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
-// import { RootState } from '../stores/types/rootState';
-// import ThreadCard from '../features/thread/components/ThreadCard';
-import { useDispatch } from 'react-redux';
+
+import { useDispatch, useSelector } from 'react-redux';
 import { GET_THREADS } from '../stores/RootReducer';
 import { useState, useEffect } from 'react';
-// import { IThreadCard } from '../interfaces/ThreadCard';
 import { API } from '../lib/api';
-// import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useParams } from 'react-router-dom';
-// import { BiChat, BiLike, BiShare } from 'react-icons/bi';
-// import { useLike } from '../hooks/useLike';
-// import moment from 'moment';
+
 import { IUser } from '../interfaces/User';
-// import { isDate } from 'date-fns';
-import { useSelector } from 'react-redux';
 import { RootState } from '../stores/types/rootState';
 import ThreadCard from '../features/thread/components/ThreadCard';
 
 export default function DetailProfileById() {
-  // const navigate = useNavigate()
   const threads = useSelector((state: RootState) => state.thread);
   const dispatch = useDispatch();
   const [user, setUser] = useState<IUser>();
@@ -60,36 +46,36 @@ export default function DetailProfileById() {
       console.error('Error fetching data:', error);
     }
   };
-  // console.log("ini isi threads broo:", response.data.threads)
   useEffect(() => {
     DetailProfileByThread();
   }, [id]);
 
-  // const {handleLikePost} = useLike()
-  // const[showImage, setShowImage] = useState<boolean>(true)
-  // const auth = useSelector((state: RootState) => state.auth)
   return user ? (
     <>
-      <Grid
-        templateColumns="repeat(2, 1fr)"
-        gap={6}
+      <SimpleGrid
+        minChildWidth={'250px'}
+        spacing={'7'}
       >
-        <div>
+        <Box>
           <SimpleSidebar />
-        </div>
-        <div>
-          <div key={user.id}></div>
-          <Center>
+        </Box>
+        <Box
+          ml={{ base: '0', md: '-20%', lg: '-20%' }}
+          p={3}
+        >
+          <Box>
+            <div key={user.id}></div>
             <Box
-              w={'900px'}
-              mr={'27px'}
+              w={'100%'}
+              display={'flex'}
+              flexDirection={'column'}
               bgColor={'#F2F5F9'}
               boxShadow="md"
               border={'1px solid #a3ced1'}
               rounded={'md'}
               overflow={'hidden'}
-              justifyContent={'start'}
-              alignItems={'start'}
+              justifyContent={'center'}
+              alignItems={'center'}
             >
               <Image
                 h={'180px'}
@@ -101,7 +87,6 @@ export default function DetailProfileById() {
               <Flex
                 justify={'start'}
                 mt={'-100px'}
-                ml={10}
               >
                 <Avatar
                   w={'220px'}
@@ -114,9 +99,7 @@ export default function DetailProfileById() {
               </Flex>
               <Stack
                 spacing={1}
-                align={'start'}
-                mt={'-110px'}
-                ml={'270px'}
+                align={'center'}
                 direction={'column'}
               >
                 <Box
@@ -134,7 +117,7 @@ export default function DetailProfileById() {
                   <MdVerified color={'blue'} />
                 </Box>
                 <Text color={'gray.500'}>@{user.username}</Text>
-                <Text color={'gray.900'}>"{user.description}"</Text>
+                <Text color={'gray.900'}>{user.description}</Text>
                 <Stack
                   direction={'row'}
                   alignItems={'center'}
@@ -212,27 +195,219 @@ export default function DetailProfileById() {
                 </Button>
               </Box>
             </Box>
-          </Center>
-          <Box w={'97%'}>
-            {threads?.map((item, index) => {
-              if (user.id === item.user.id)
-                return (
-                  <ThreadCard
-                    key={index}
-                    replies_count={item.replies_count}
-                    content={item.content}
-                    image={item.image}
-                    id={item.id}
-                    likes_count={item.likes_count}
-                    user={item.user}
-                    is_liked={item.is_liked}
-                    posted_at={item.posted_at}
-                  />
-                );
-            })}
+            <Box>
+              {threads?.map((item, index) => {
+                if (user.id === item.user.id)
+                  return (
+                    <ThreadCard
+                      key={index}
+                      replies_count={item.replies_count}
+                      content={item.content}
+                      image={item.image}
+                      id={item.id}
+                      likes_count={item.likes_count}
+                      user={item.user}
+                      is_liked={item.is_liked}
+                      posted_at={item.posted_at}
+                    />
+                  );
+              })}
+            </Box>
           </Box>
-        </div>
-      </Grid>
+        </Box>
+        <Box
+          bgColor="#dfe9f0"
+          p="20px"
+          h="400px"
+          mt={3}
+          mx={3}
+          borderRadius={10}
+        >
+          <Heading
+            as="h5"
+            size="sm"
+            color="black"
+            pl="15px"
+          >
+            Suggest For You
+          </Heading>
+          <Box
+            mt="20px"
+            display="flex"
+            justifyContent="space-around"
+            alignItems="center"
+            p="0 8px"
+          >
+            <Image
+              w="40px"
+              h="40px"
+              objectFit="cover"
+              borderRadius="50%"
+              src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjN8fFBFT1BMRXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60"
+            ></Image>
+            <Box
+              marginRight="15px"
+              w="65%"
+              pl="2"
+            >
+              <Text
+                color="black"
+                fontSize="12px"
+                fontWeight="bold"
+              >
+                Muhammad Ikhsan
+              </Text>
+              <Text
+                color="#788189"
+                fontSize="12px"
+              >
+                @mrramdhan56
+              </Text>
+            </Box>
+            <Button size="xs">Following</Button>
+          </Box>
+          <Box
+            mt="20px"
+            display="flex"
+            justifyContent="space-around"
+            alignItems="center"
+            p="0 8px"
+          >
+            <Image
+              w="40px"
+              h="40px"
+              objectFit="cover"
+              borderRadius="50%"
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHBlb3BsZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60"
+            ></Image>
+            <Box
+              marginRight="15px"
+              w="65%"
+              pl="2"
+            >
+              <Text
+                color="black"
+                fontSize="12px"
+                fontWeight="bold"
+              >
+                Anwar Ahmad
+              </Text>
+              <Text
+                color="#788189"
+                fontSize="12px"
+              >
+                @anwar34
+              </Text>
+            </Box>
+            <Button size="xs">Follow</Button>
+          </Box>
+          <Box
+            mt="20px"
+            display="flex"
+            justifyContent="space-around"
+            alignItems="center"
+            p="0 8px"
+          >
+            <Image
+              w="40px"
+              h="40px"
+              objectFit="cover"
+              borderRadius="50%"
+              src="https://plus.unsplash.com/premium_photo-1668399855680-1ee24ade4a29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjl8fHBlb3BsZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60"
+            ></Image>
+            <Box
+              marginRight="15px"
+              w="65%"
+              pl="2"
+            >
+              <Text
+                color="black"
+                fontSize="12px"
+                fontWeight="bold"
+              >
+                Angel Francis
+              </Text>
+              <Text
+                color="#788189"
+                fontSize="12px"
+              >
+                @aangel78
+              </Text>
+            </Box>
+            <Button size="xs">Follow</Button>
+          </Box>
+          <Box
+            mt="20px"
+            display="flex"
+            justifyContent="space-around"
+            alignItems="center"
+            p="0 8px"
+          >
+            <Image
+              w="40px"
+              h="40px"
+              objectFit="cover"
+              borderRadius="50%"
+              src="https://plus.unsplash.com/premium_photo-1673957923985-b814a9dbc03d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzV8fHBlb3BsZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60"
+            ></Image>
+            <Box
+              marginRight="15px"
+              w="65%"
+              pl="2"
+            >
+              <Text
+                color="black"
+                fontSize="12px"
+                fontWeight="bold"
+              >
+                Maya Nur Diana
+              </Text>
+              <Text
+                color="#788189"
+                fontSize="12px"
+              >
+                @diana_nur
+              </Text>
+            </Box>
+            <Button size="xs">Follow</Button>
+          </Box>
+          <Box
+            mt="20px"
+            display="flex"
+            justifyContent="space-around"
+            alignItems="center"
+            p="0 8px"
+          >
+            <Image
+              w="40px"
+              h="40px"
+              objectFit="cover"
+              borderRadius="50%"
+              src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjN8fFBFT1BMRXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60"
+            ></Image>
+            <Box
+              marginRight="15px"
+              w="65%"
+              pl="2"
+            >
+              <Text
+                color="black"
+                fontSize="12px"
+                fontWeight="bold"
+              >
+                Muhammad Ikhsan
+              </Text>
+              <Text
+                color="#788189"
+                fontSize="12px"
+              >
+                @mrramdhan56
+              </Text>
+            </Box>
+            <Button size="xs">Follow</Button>
+          </Box>
+        </Box>
+      </SimpleGrid>
     </>
   ) : null;
 }

@@ -4,7 +4,7 @@
 import ThreadCard from './features/thread/components/ThreadCard';
 import SimpleSidebar from './features/thread/components/SimpleSidebar';
 import SideRight from './features/thread/components/SideRight';
-import { FormLabel, Grid } from '@chakra-ui/react';
+import { FormLabel, Grid, SimpleGrid } from '@chakra-ui/react';
 import { Box, Button, Avatar, Input } from '@chakra-ui/react';
 import { useHooks } from './hooks/useHooks';
 import { BiImageAdd } from 'react-icons/bi';
@@ -18,21 +18,26 @@ function Home() {
   const { createFetchData, handleContentChange, handleImageChange, handleUploadCheck } = useHooks();
   return (
     <>
-      <Grid
-        templateColumns="repeat(3, 1fr)"
-        gap={5}
+      <SimpleGrid
+        minChildWidth={'250px'}
+        spacing={'7'}
       >
-        <div>
+        <Box>
           <SimpleSidebar />
-        </div>
-        <div>
-          <Box w="500px">
+        </Box>
+        <Box>
+          <Box
+            w={{ base: '100%', md: '500px', lg: '500px' }}
+            ml={{ base: '0', md: '-20%', lg: '-20%' }}
+            p={3}
+            pt={'-20'}
+          >
             <form
               action=""
               onSubmit={createFetchData}
             >
               <Box
-                mt="5"
+                mt={{ base: '0', md: '-100px', lg: '5' }}
                 p="10px"
                 border="1px solid #a3ced1"
                 borderRadius={10}
@@ -121,11 +126,11 @@ function Home() {
               );
             })}
           </Box>
-        </div>
-        <div>
+        </Box>
+        <Box display={{ base: 'block', md: 'none', lg: 'block' }}>
           <SideRight />
-        </div>
-      </Grid>
+        </Box>
+      </SimpleGrid>
     </>
   );
 }

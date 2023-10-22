@@ -1,11 +1,9 @@
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Home from './Home';
-// import { DetailPage } from "./pages/DetailPage";
 import LogForm from './features/auth/LogForm';
 import RegisterForm from './features/auth/RegisterForm';
 import { useEffect, useState } from 'react';
 import { API, setAuthToken } from './lib/api';
-// import ThreadCard from "./features/thread/components/ThreadCard";
 import Loading from './features/thread/components/Loading';
 import { DetailPage } from './pages/DetailPage';
 import { useDispatch } from 'react-redux';
@@ -14,10 +12,7 @@ import Posting from './pages/Posting';
 import DetailProfile from './pages/DetailProfile';
 import DetailProfileById from './pages/DetailProfileByThread';
 import FormEditProfile from './pages/FormEditProfile';
-import FollowPage from './pages/FollowPage';
-// import FormEditProfile from "./pages/formEditProfile";
-// import Edit from "./pages/Edit";
-// import LoginForm from "./features/auth/LoginForm";
+import Follows from './pages/FollowPage';
 
 export default function App() {
   const [isLoading, setLoading] = useState<boolean>(true);
@@ -96,8 +91,12 @@ export default function App() {
             element={<FormEditProfile />}
           />
           <Route
-            path="/follow/"
-            element={<FollowPage />}
+            element={
+              <main>
+                <Follows />
+              </main>
+            }
+            path="/follows"
           />
         </Routes>
       )}

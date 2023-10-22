@@ -100,15 +100,30 @@ import { MdVerified } from 'react-icons/Md';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../../stores/types/rootState';
+import { API } from '../../../lib/api';
+import { GET_FOLLOWS } from '../../../stores/RootReducer';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 // import { BiMessageAdd } from "react-icons/bi"
 
 export default function SideRight() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = useSelector((state: RootState) => {
     return state.auth;
   });
-  console.log(auth);
+  const followState = useSelector((state: RootState) => state.follow.followState);
+  const follows = useSelector((state: RootState) => state.follow.follows);
+  const followingsCount = follows.length;
 
+  async function getFollowData() {
+    const response = await API.get(`/follows?type=${followState}`);
+    dispatch(GET_FOLLOWS(response.data));
+  }
+
+  useEffect(() => {
+    getFollowData();
+  }, [followState]);
   return (
     <Box
       bgColor="#F0F5F9"
@@ -140,6 +155,7 @@ export default function SideRight() {
             >
               <Avatar
                 onClick={() => navigate('/DetailProfile')}
+                cursor={'pointer'}
                 size={'xl'}
                 src={auth.picture}
                 css={{
@@ -159,6 +175,8 @@ export default function SideRight() {
               mb={1}
             >
               <Heading
+                onClick={() => navigate('/DetailProfile')}
+                cursor={'pointer'}
                 fontSize={'md'}
                 fontWeight={650}
                 display={'flex'}
@@ -197,7 +215,7 @@ export default function SideRight() {
                   fontWeight={600}
                   mr={'1'}
                 >
-                  230
+                  {followingsCount}
                 </Text>
                 <Text
                   fontSize={'16px'}
@@ -216,7 +234,7 @@ export default function SideRight() {
                   fontWeight={600}
                   mr={'1'}
                 >
-                  45
+                  {followingsCount}
                 </Text>
                 <Text
                   fontSize={'16px'}
