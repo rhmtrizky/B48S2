@@ -36,16 +36,13 @@ class UpdateUserService {
       } else {
         userData.picture = userData.picture;
       }
-      // userData.username = username;
-      // userData.full_name = full_name;
-      // userData.picture = cloudinaryResponse.url;
-      // userData.description = description;
 
       if (username !== null && username !== '') {
         userData.username = username;
       } else {
         userData.username = userData.username;
       }
+
       if (full_name !== null && full_name !== '') {
         userData.full_name = full_name;
       } else {
